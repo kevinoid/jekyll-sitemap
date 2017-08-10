@@ -193,6 +193,33 @@ describe(Jekyll::JekyllSitemap) do
     end
   end
 
+  context "custom XML namespaces" do
+    let(:config) do
+      # Examples use the Google Image and Video Sitemap Extensions
+      # https://support.google.com/webmasters/answer/178636
+      # https://support.google.com/webmasters/answer/80471
+      xmlns_config = {
+        "sitemap" => {
+          "xmlns" => {
+            "image" => "http://www.google.com/schemas/sitemap-image/1.1",
+            "video" => "http://www.google.com/schemas/sitemap-video/1.1"
+          }
+        }
+      }
+      Jekyll.configuration(Jekyll::Utils.deep_merge_hashes(overrides, xmlns_config))
+    end
+
+    it "declares custom XML namespaces" do
+      expect(contents).to match %r{
+        <urlset xmlns="http://www\.sitemaps\.org/schemas/sitemap/0\.9"\s+
+          xmlns:image="http://www\.google\.com/schemas/sitemap-image/1\.1"\s+
+          xmlns:video="http://www\.google\.com/schemas/sitemap-video/1\.1"\s+
+          xmlns:xsi="http://www\.w3\.org/2001/XMLSchema-instance"\s+
+          xsi:schemaLocation="http://www\.sitemaps\.org/schemas/sitemap/0\.9 http://www\.sitemaps\.org/schemas/sitemap/0\.9/sitemap\.xsd">
+      }x
+    end
+  end
+
   context "with urls that needs URI encoding" do
     let(:config) do
       Jekyll.configuration(Jekyll::Utils.deep_merge_hashes(overrides, {"url" => "http://ümlaut.example.org"}))
