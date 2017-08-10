@@ -218,6 +218,19 @@ describe(Jekyll::JekyllSitemap) do
           xsi:schemaLocation="http://www\.sitemaps\.org/schemas/sitemap/0\.9 http://www\.sitemaps\.org/schemas/sitemap/0\.9/sitemap\.xsd">
       }x
     end
+
+    it "puts custom tags into sitemap.xml" do
+      expect(contents).to match %r{
+        <loc>http://example\.org/some-subfolder/page-sitemap-custom-tags\.html</loc>\s*
+        (<lastmod>[^<]*</lastmod>\s*)?
+        <changefreq>always</changefreq>\s*
+        <priority>0\.9</priority>\s*
+        <image:image>\s*
+          <image:loc>http://example\.org/image\.jpg</image:loc>\s*
+          <image:caption>Dogs playing poker</image:caption>\s*
+        </image:image>
+      }x
+    end
   end
 
   context "with urls that needs URI encoding" do

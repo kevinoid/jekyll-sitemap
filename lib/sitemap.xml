@@ -17,9 +17,7 @@
         {% if doc.last_modified_at or doc.date %}
           <lastmod>{{ doc.last_modified_at | default: doc.date | date_to_xmlschema }}</lastmod>
         {% endif %}
-        {% for tag in doc.sitemap.tags %}
-          <{{ tag[0] }}>{{ tag[1] }}</{{ tag[0] }}>
-        {% endfor %}
+        {% doc.sitemap.tags | jsonml_to_xml %}
       </url>
     {% endfor %}
   {% endfor %}
